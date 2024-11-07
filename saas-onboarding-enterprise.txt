@@ -1,0 +1,55 @@
+@startuml
+actor Organization
+actor OFC_Tech
+
+box "Onboarding Setup"
+actor OFC_PO
+participant OBParserTool
+participant DataModel
+end box
+
+box "Organization Cluster"
+participant ImportAPI
+participant Blockchain
+end box
+
+box "Foundation Cluster"
+participant ChainAPI
+participant DataOracle
+participant ParserToolBackend
+participant FundingService
+participant SPVService
+participant CacheProcess
+participant Cache
+participant Dashboard
+end box
+
+actor PublicPerson
+Organization <-> OFC_PO : OB Meeting
+OFC_PO -> DataModel: Data Model Registration
+DataModel -> DataModel : Load Industry Data Model
+OFC_PO -> OBParserTool : Load Customer Data Samples
+OFC_PO -> OBParserTool : Map Customer Data
+OBParserTool --> DataModel: Save Data Model
+
+
+OFC_Tech -> ImportAPI: Initial Registration
+ImportAPI -> Blockchain : On-chain Registration
+ImportAPI -> ChainAPI : On-chain Registration
+ChainAPI -> DataOracle: Register User Data
+ChainAPI -> FundingService: Request User Funding
+FundingService -> SPVService : Send Coins
+CacheProcess -> CacheProcess : New Block
+CacheProcess -> Cache : Update Industry Chain Info
+Dashboard -> Cache : Report Data
+
+Organization -> ImportAPI : Send Batch Data
+ImportAPI -> Blockchain : Check Balance
+ImportAPI -> ParserToolBackend : Get Organization Data Model
+ImportAPI -> ImportAPI : Process Batch
+ImportAPI -> Blockchain : Send Transactions
+
+CacheProcess -> CacheProcess : New Block
+CacheProcess -> Cache : Update Industry Chain Info
+Dashboard -> Cache : Report Data
+@enduml
