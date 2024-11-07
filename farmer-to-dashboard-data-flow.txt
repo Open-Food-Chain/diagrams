@@ -1,0 +1,45 @@
+@startuml
+actor Farmer
+
+box "Mobile App"
+participant MobileApp
+participant ThirdPartyServer
+end box
+
+box "Farmer Cluster"
+participant ChainAPI
+participant DataOracle
+end box
+
+box "Foundation Cluster"
+participant FundingService
+participant SPVService
+participant FullNode
+participant CacheProcess
+participant Cache
+participant Dashboard
+end box
+
+actor NonFarmerUser
+
+MobileApp -> ThirdPartyServer: User Registration
+ThirdPartyServer --> MobileApp: Registration Success
+
+
+MobileApp -> ChainAPI: Notify Registration
+ChainAPI -> DataOracle: Register User Data
+ChainAPI -> FundingService: Request User Funding
+FundingService -> SPVService : Send Coins
+SPVService -> FullNode : Send Coins
+FullNode -> CacheProcess : New Block
+CacheProcess -> Cache : Update Industry Chain Info
+Dashboard -> Cache : Report Data
+
+MobileApp -> SPVService : Send Batch Data
+MobileApp -> SPVService : Check Balance
+MobileApp -> FundingService : Request User Funding
+
+FullNode -> CacheProcess : New Block
+CacheProcess -> Cache : Update Industry Chain Info
+Dashboard -> Cache : Report Data
+@enduml
