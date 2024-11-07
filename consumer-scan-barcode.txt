@@ -1,0 +1,17 @@
+@startuml
+actor Consumer
+
+box "Foundation Cluster"
+participant Dashboard
+participant Cache
+participant Explorer
+participant ChainAPI
+end box
+
+Consumer -> Consumer : Scan barcode
+Consumer -> Dashboard : Product summary
+Dashboard -> Cache : Product data report
+Dashboard -> ChainAPI : (Optional) Deeper insight
+Consumer -> Dashboard : Verify claims
+Dashboard -> Explorer : Get transaction details
+@enduml
